@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@graphql-tools/utils": "^10.3.2",
     "@types/graphql": "^14.5.0",
     "@types/koa": "^2.15.0",
     "@types/koa-bodyparser": "^4.3.12",

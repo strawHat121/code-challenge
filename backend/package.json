@@ -16,6 +16,7 @@
     "@types/koa-router": "^7.4.8",
     "@types/node": "^20.14.10",
     "apollo-server-koa": "^3.13.0",
+    "dotenv": "^16.4.5",
     "graphql": "^15.9.0",
     "koa": "^2.15.3",
     "koa-bodyparser": "^4.4.1",

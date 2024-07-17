@@ -4,6 +4,7 @@ import bodyParser from "koa-bodyparser";
 import { ApolloServer } from "apollo-server-koa";
 import mongoose, { ConnectOptions } from "mongoose";
 import dotenv from "dotenv";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 
 import typeDefs from "./graphql/schema";
 import resolvers from "./graphql/resolvers";
@@ -21,18 +22,22 @@ const startServer = async () => {
     throw new Error("MONGO_URI environment variable is not defined");
   }
 
-  // Define mongoose connection options
-  const mongooseOptions: ConnectOptions = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  } as ConnectOptions;
+  try {
+    await mongoose.connect(mongoUri);
+    console.log("Connected to MongoDB");
+  } catch (err) {
+    console.error("Failed to connect to MongoDB", err);
+    process.exit(1); // Exit the process with failure
+  }
 
-  mongoose
-    .connect(mongoUri)
-    .then(() => console.log("Connected to MongoDB"))
-    .catch((err) => console.error("Failed to connect to MongoDB", err));
-
-  const server = new ApolloServer({ typeDefs, resolvers });
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    introspection: true, // Enable introspection in production
+    plugins: [
+      ApolloServerPluginLandingPageGraphQLPlayground(), // Enable GraphQL Playground
+    ], // Enable GraphQL Playground
+  });
 
   // Start the Apollo Server
   await server.start();

@@ -1,35 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import CreateAccount from './components/CreateAccount';
+import TransferMoney from './components/TransferMoney';
+import AccountList from './components/AccountList';
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+interface Account {
+  id: string;
+  name: string;
+  balance: number;
 }
 
-export default App
+const App: React.FC = () => {
+  const [accounts, setAccounts] = useState<Account[]>([
+    { id: '1', name: 'Default Account 1', balance: 1000 },
+    { id: '2', name: 'Default Account 2', balance: 2000 },
+  ]);
+
+  return (
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li><Link to="/create-account">Create Account</Link></li>
+            <li><Link to="/transfer-money">Transfer Money</Link></li>
+            <li><Link to="/accounts">Accounts</Link></li>
+          </ul>
+        </nav>
+        <Routes>
+          <Route path="/create-account" element={<CreateAccount />} />
+          <Route path="/transfer-money" element={<TransferMoney />} />
+          <Route path="/accounts" element={<AccountList accounts={accounts} />} />
+          <Route path="/" element={<AccountList accounts={accounts} />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+};
+
+export default App;
